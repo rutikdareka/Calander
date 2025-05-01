@@ -1,0 +1,246 @@
+/* Calendar CSS - Converted from Tailwind */
+
+/* Base styles */
+.calendar-container {
+    width: 100%;
+    font-size: 15px;
+  }
+  
+  .calendar {
+    color: #ffffff; /* text-white */
+    border-radius: 0.5rem; /* rounded-lg */
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-lg */
+    overflow: hidden;
+  }
+  
+  /* Header */
+  .calendar-header {
+    
+    display: flex;
+    align-items: center;
+    
+    justify-content: space-around;
+  }
+  
+  .header-title {
+    font-size: 1.25rem; /* text-xl */
+    font-weight: 600; /* font-semibold */
+    font-size: 13px;
+  }
+  
+  .nav-button {
+    color: #d1d5db; /* text-gray-300 */
+    padding: 0.4rem; /* p-2 */
+    display: flex;
+    align-items: center;
+  }
+  
+  .nav-button:hover {
+    color: #ffffff; /* hover:text-white */
+  }
+  
+  /* .nav-button svg {
+    width: 16px;
+    height: 16px;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+  } */
+  
+  /* Calendar grid */
+  .calendar-grid {
+    padding: 0.5rem; /* p-4 */
+  }
+  
+  .weekday-headers {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    margin-bottom: 0.5rem; /* mb-2 */
+  }
+  
+  .weekday-header {
+    text-align: center;
+    color: #9ca3af; /* text-gray-400 */
+    font-weight: 500; /* font-medium */
+  }
+  
+  .days-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.25rem; /* gap-1 */
+  }
+
+  .five-day-range {
+    background: #292929; /* Light blue background for five-day range */
+  }
+  
+  .day-cell {
+    height: 2.5rem; /* h-10 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.25rem; /* rounded */
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s; /* transition-colors */
+  }
+  
+  .day-cell.other-month {
+    color: #6b7280; /* text-gray-500 */
+  }
+  
+  .day-cell.selected {
+    background-image: linear-gradient(to right, #3b82f6, #8b5cf6); /* bg-gradient-to-r from-blue-500 to-purple-600 */
+    color: #ffffff; /* text-white */
+    font-weight: 500; /* font-medium */
+  }
+  
+  .day-cell.today {
+    background-image: linear-gradient(to right, #3b82f6, #8b5cf6); /* bg-gradient-to-r from-blue-500 to-purple-600 */
+    color: #ffffff; /* text-white */
+    font-weight: 700; /* font-bold */
+  }
+  
+  .day-cell:not(.other-month):not(.selected):not(.today):hover {
+    background-color: #111827; /* hover:bg-gray-900 */
+  }
+  
+  /* Timezone section */
+  .timezone-section {
+    border-top: 1px solid #374151; /* border-t border-gray-700 */
+    padding: 1rem; /* p-4 */
+    position: relative;
+  }
+  
+  .timezone-header {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .time-display {
+    font-size: 1.125rem; /* text-lg */
+    font-weight: 500; /* font-medium */
+    font-size: 12px;
+  }
+  
+  .timezone-button {
+    padding: 0.25rem 0.75rem; /* px-3 py-1 */
+    background-image: linear-gradient(to right, #3b82f6, #8b5cf6); /* bg-gradient-to-r from-blue-500 to-purple-600 */
+    border-radius: 0.25rem; /* rounded */
+    font-size: 0.875rem; /* text-sm */
+    transition: background-image 0.2s; /* transition-colors */
+    display: flex;
+    align-items: center;
+  }
+  
+  .timezone-button:hover {
+    background-image: linear-gradient(to right, #2563eb, #7c3aed); /* hover:from-blue-600 hover:to-purple-700 */
+  }
+  
+  .timezone-button svg {
+    margin-right: 0.25rem; /* mr-1 */
+    width: 16px;
+    height: 16px;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+  }
+  
+  /* Timezone panel */
+  .timezone-panel {
+    margin-top: 1rem; /* mt-4 */
+    padding: 0.75rem; /* p-3 */
+    background-color: black; /* bg-gray-900 */
+    border-radius: 0.25rem; /* rounded */
+    border: 1px solid #374151; /* border border-gray-700 */
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-lg */
+    position: absolute; 
+bottom: 60px;
+color: white;
+z-index: 10000;
+  }
+  
+  .search-container {
+    position: relative;
+    margin-bottom: 0.75rem; /* mb-3 */
+  }
+  
+  .search-icon {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    padding-left: 0.75rem; /* pl-3 */
+    pointer-events: none;
+  }
+  
+  .search-input {
+    padding: 0.5rem;
+    padding-left: 2.5rem; /* pl-10 */
+    background-color: #1f2937; /* bg-gray-800 */
+    border: 1px solid #4b5563; /* border border-gray-600 */
+    border-radius: 0.25rem; /* rounded */
+    color: white;
+  }
+  
+  .search-input:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #3b82f6; /* focus:ring-2 focus:ring-blue-500 */
+  }
+  
+  .timezone-list {
+    max-height: 12rem; /* max-h-48 */
+    overflow-y: auto;
+    padding-right: 0.25rem; /* pr-1 */
+  }
+  
+  .timezone-item {
+    padding: 0.5rem; /* p-2 */
+    cursor: pointer;
+    border-radius: 0.25rem; /* rounded */
+    margin-bottom: 0.25rem; /* mb-1 */
+    transition: background-color 0.2s; /* transition-colors */
+  }
+  
+  .timezone-item:hover:not(.selected) {
+    background-color: #1f2937; /* hover:bg-gray-800 */
+  }
+  
+  .timezone-item.selected {
+    background-image: linear-gradient(to right, #3b82f6, #8b5cf6); /* bg-gradient-to-r from-blue-500 to-purple-600 */
+    color: white;
+  }
+  
+  .timezone-item-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .timezone-city {
+    font-weight: 500; /* font-medium */
+  }
+  
+  .timezone-region {
+    font-size: 0.75rem; /* text-xs */
+    color: #9ca3af; /* text-gray-400 */
+    margin-left: 0.5rem; /* ml-2 */
+  }
+  
+  .checkmark-icon {
+    width: 16px;
+    height: 16px;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+  }

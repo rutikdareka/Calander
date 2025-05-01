@@ -1,0 +1,198 @@
+body {
+    color: white;
+    background-color: #121212; /* Adding a dark background */
+  }
+  
+  /* Container styles */
+  .login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+  }
+  
+  .form-container {
+    width: 100%;
+    max-width: 350px;
+    padding: 1.5rem;
+    transition: all 0.5s ease;
+  }
+  
+  /* Header styles */
+  .header {
+    font-size: 2.25rem;
+    font-weight: 500;
+    text-align: center;
+    margin-bottom: 2.5rem;
+    transition: all 0.3s ease;
+    color: white;
+  }
+  
+  /* Form styles */
+  .form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+  }
+  
+  .input-group {
+    position: relative;
+    width: 100%;
+  }
+  
+  .input-field {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 9999px;
+    font-size: 1.125rem;
+    transition: all 0.3s ease;
+    color: white;
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+  
+  .input-field::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+  }
+  
+  .input-field:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+  }
+  
+  /* Password field transition */
+  .password-field {
+    transition: all 0.3s ease;
+    margin: 0;
+    overflow: hidden;
+  }
+  
+  .password-field.hidden {
+    max-height: 0;
+    opacity: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  
+  .password-field.visible {
+    max-height: 4rem;
+    opacity: 1;
+  }
+  
+  .toggle-password {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(255, 255, 255, 0.7);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+  }
+  
+  .toggle-password .icon {
+    stroke: rgba(255, 255, 255, 0.7);
+  }
+  
+  /* Button styles */
+  .submit-button {
+    width: 100%;
+    background-color: white;
+    color: black;
+    padding: 1rem 1.5rem;
+    border-radius: 9999px;
+    font-size: 1.125rem;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .submit-button:hover {
+    transform: scale(1.01);
+    background-color: #f0f0f0;
+  }
+  
+  /* Link styles */
+  .toggle-link-container {
+    margin-top: 1.5rem;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.9);
+  }
+  
+  .toggle-link {
+    color: #3b82f6;
+    font-weight: 500;
+    margin-left: 0.5rem;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: none;
+    border: 1px solid #444;
+    border-radius: 50px;
+   
+  }
+
+  /* Divider styles */
+  .divider {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin: 2rem 0;
+  }
+  
+  .divider-line {
+    flex-grow: 1;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  .divider-text {
+    flex-shrink: 0;
+    margin: 0 1rem;
+    color: rgba(255, 255, 255, 0.7);
+  }
+  
+  /* Social login buttons */
+  .social-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 9999px;
+    padding: 0.75rem 1rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
+    background-color: transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 0.75rem;
+    box-sizing: border-box;
+  }
+  
+  .social-button:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+  
+  .social-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-right: 0.75rem;
+  }
+  
+  /* Animations */
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  .fade-in {
+    animation: fadeIn 0.5s ease forwards;
+  }

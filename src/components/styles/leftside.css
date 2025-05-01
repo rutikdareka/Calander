@@ -1,0 +1,11 @@
+.calander_left_side {
+    width:350px;
+    border-right: 1px solid #4444;
+    padding: 10px;
+    background-color: black;
+}
+
+.name_of {
+    font-weight: bold;
+    font-size: 22px;
+} 
