@@ -122,6 +122,7 @@
       color: white;
 }
 
+
 /* Grid header */
 .grid-header {
   display: grid;
@@ -332,6 +333,12 @@
   transform: scale(1.05);
 }
 
+
+
+.event {
+  border: none !important;
+}
+
 .plus-icon {
   transition: transform 0.3s ease;
 }
@@ -467,3 +474,7 @@
   font-size: 12px;
   line-height: 1.2;
 }
+
+
+
+

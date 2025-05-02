@@ -50,11 +50,17 @@ const MeetingScheduler = () => {
   const [editingEventIndex, setEditingEventIndex] = useState(null);
   const [conference, setConference] = useState(''); // New state for conferencing
   const [calendar, setCalendar] = useState('rutikdarekar7'); // Default calendar
+  
+  // New states for participant management
+  const [participantsList, setParticipantsList] = useState([]);
+  const [participantEmail, setParticipantEmail] = useState('');
+  const [formErrors, setFormErrors] = useState({});
 
   const modalRef = useRef(null);
   const timezoneRef = useRef(null);
   const startDatePickerRef = useRef(null);
   const endDatePickerRef = useRef(null);
+  const emailInputRef = useRef(null);
 
   const TIMEZONES = [
     'Africa/Abidjan', 'Africa/Accra', 'Africa/Cairo', 'Africa/Johannesburg', 'Africa/Lagos',
@@ -106,6 +112,47 @@ const MeetingScheduler = () => {
     }
   };
 
+  // Add participant validation and handling functions
+  const handleAddParticipant = () => {
+    if (!participantEmail) {
+      setFormErrors({...formErrors, participantEmail: 'Email is required'});
+      return;
+    }
+    
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(participantEmail)) {
+      setFormErrors({...formErrors, participantEmail: 'Please enter a valid email'});
+      return;
+    }
+    
+    setParticipantsList([...participantsList, participantEmail]);
+    setParticipantEmail('');
+    setFormErrors({...formErrors, participants: null, participantEmail: null});
+  };
+
+  const removeParticipant = (email) => {
+    setParticipantsList(participantsList.filter(p => p !== email));
+  };
+
+  const validateForm = () => {
+    const errors = {};
+    
+    if (!meetingTitle.trim()) {
+      errors.meetingTitle = 'Meeting title is required';
+    }
+    
+    if (participantsList.length === 0) {
+      errors.participants = 'At least one participant is required';
+    }
+    
+    if (!location.trim()) {
+      errors.location = 'Location is required';
+    }
+    
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
   useEffect(() => {
     if (showMeetingScheduler && selectedBlocks.length > 0) {
       const sortedBlocks = selectedBlocks.sort((a, b) => a.slotIndex - b.slotIndex);
@@ -147,7 +194,8 @@ const MeetingScheduler = () => {
       setDuration(durationMinutes >= 60 ? `${Math.floor(durationMinutes / 60)}h ${durationMinutes % 60}m` : `${durationMinutes}m`);
 
       setMeetingTitle('');
-      setParticipants('');
+      setParticipantsList([]);
+      setParticipantEmail('');
       setRepeatOption('Does not repeat');
       setLocation('');
       setDescription('');
@@ -167,7 +215,10 @@ const MeetingScheduler = () => {
       if (eventToEdit) {
         setEditingEventIndex(events.indexOf(eventToEdit));
         setMeetingTitle(eventToEdit.meetingTitle);
-        setParticipants(eventToEdit.participants || '');
+        // Convert participants string to array if needed
+        setParticipantsList(Array.isArray(eventToEdit.participants) ? 
+                         eventToEdit.participants : 
+                         (eventToEdit.participants ? [eventToEdit.participants] : []));
         setStartDate(new Date(eventToEdit.startDate));
         setStartTime(eventToEdit.startTime);
         setEndDate(new Date(eventToEdit.endDate));
@@ -185,32 +236,36 @@ const MeetingScheduler = () => {
   }, [showMeetingScheduler, selectedBlocks, timeSlots, days, viewDate, events]);
 
   const handleSave = () => {
-    const newEvent = {
-      meetingTitle,
-      participants,
-      startDate: new Date(startDate),
-      startTime,
-      endDate: new Date(endDate),
-      endTime,
-      duration,
-      isAllDay,
-      repeatOption,
-      location,
-      description,
-      timezone,
-      conference,
-      calendar,
-    };
-    setEvents((prev) => {
-      const updated = [...prev];
-      if (editingEventIndex !== null) updated[editingEventIndex] = newEvent;
-      else updated.push(newEvent);
-      return updated;
-    });
-    setEditingEventIndex(null);
-    resetMeetingStates();
-    setShowMeetingScheduler(false);
-    setSelectedBlocks([]);
+    if (validateForm()) {
+      const newEvent = {
+        meetingTitle,
+        participants: participantsList,
+        startDate: new Date(startDate),
+        startTime,
+        endDate: new Date(endDate),
+        endTime,
+        duration,
+        isAllDay,
+        repeatOption,
+        location,
+        description,
+        timezone,
+        conference,
+        calendar,
+      };
+      
+      setEvents((prev) => {
+        const updated = [...prev];
+        if (editingEventIndex !== null) updated[editingEventIndex] = newEvent;
+        else updated.push(newEvent);
+        return updated;
+      });
+      
+      setEditingEventIndex(null);
+      resetMeetingStates();
+      setShowMeetingScheduler(false);
+      setSelectedBlocks([]);
+    }
   };
 
   const handleClose = () => {
@@ -218,6 +273,7 @@ const MeetingScheduler = () => {
     setShowMeetingScheduler(false);
     setSelectedBlocks([]);
     setEditingEventIndex(null);
+    setFormErrors({});
   };
 
   useEffect(() => {
@@ -244,11 +300,20 @@ const MeetingScheduler = () => {
             <div className="input-group">
               <input
                 value={meetingTitle}
-                onChange={(e) => setMeetingTitle(e.target.value)}
+                onChange={(e) => {
+                  setMeetingTitle(e.target.value);
+                  if (e.target.value.trim()) {
+                    setFormErrors({...formErrors, meetingTitle: null});
+                  }
+                }}
                 placeholder="Add title"
-                className="meeting-title"
+                className={`meeting-title ${formErrors.meetingTitle ? 'error-input' : ''}`}
               />
+              {formErrors.meetingTitle && (
+                <p className="error-message">{formErrors.meetingTitle}</p>
+              )}
             </div>
+            
             <div className="date-time-section">
               <div className="date-time-row">
                 <div className="date-picker-wrapper">
@@ -316,25 +381,106 @@ const MeetingScheduler = () => {
                 </label>
               </div>
             </div>
+            
+            {/* Updated participants section with email validation */}
             <div className="input-group">
-              <input
-                value={participants}
-                onChange={(e) => setParticipants(e.target.value)}
-                placeholder="Invite individual participants or your groups"
-                className="participants"
-              />
+              <div className={`participants-container ${formErrors.participants ? 'error-container' : ''}`}>
+                <div className="email-input-row">
+                  <input
+                    ref={emailInputRef}
+                    value={participantEmail}
+                    onChange={(e) => {
+                      setParticipantEmail(e.target.value);
+                      if (formErrors.participantEmail) {
+                        setFormErrors({...formErrors, participantEmail: null});
+                      }
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        handleAddParticipant();
+                      }
+                    }}
+                    placeholder="Add participants (email required)"
+                    className="participants"
+                  />
+                  <button 
+                    onClick={handleAddParticipant}
+                    className="add-participant-btn"
+                  >
+                    Add
+                  </button>
+                </div>
+                
+                {formErrors.participantEmail && (
+                  <p className="error-message">{formErrors.participantEmail}</p>
+                )}
+                
+                {formErrors.participants && (
+                  <p className="error-message">{formErrors.participants}</p>
+                )}
+                {
+                    participantsList.length > 0 ?   <div className="participants-list">
+                    {participantsList.map((email, index) => (
+                      <div 
+                        key={index} 
+                        className="participant-tag"
+                      >
+                        <span>{email}</span>
+                        <button 
+                          onClick={() => removeParticipant(email)}
+                          className="remove-participant-btn"
+                        >
+                          ×
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                  : ""
+                }
+              
+              </div>
             </div>
+            
             <div className="input-group">
               <input
                 value={location}
-                onChange={(e) => setLocation(e.target.value)}
+                onChange={(e) => {
+                  setLocation(e.target.value);
+                  if (e.target.value.trim()) {
+                    setFormErrors({...formErrors, location: null});
+                  }
+                }}
                 placeholder="Event location"
-                className="location"
+                className={`location ${formErrors.location ? 'error-input' : ''}`}
+              />
+              {formErrors.location && (
+                <p className="error-message">{formErrors.location}</p>
+              )}
+            </div>
+            
+            {/* <div className="input-group">
+              <select
+                value={conference}
+                onChange={(e) => setConference(e.target.value)}
+                className="conference-select"
+              >
+                <option value="">Add conferencing</option>
+                <option value="google-meet">Google Meet</option>
+                <option value="zoom">Zoom</option>
+                <option value="teams">Microsoft Teams</option>
+              </select>
+            </div> */}
+            
+            <div className="input-group">
+              <textarea 
+                value={description} 
+                onChange={(e) => setDescription(e.target.value)} 
+                placeholder="Type details" 
+                className="description" 
               />
             </div>
-            <div className="input-group">
-            <textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Type details" className="description" />
-            </div>
+            
             <div className="action-buttons">
               <button onClick={handleSave} className="save-button">Save</button>
               <button onClick={handleClose} className="close-button">Close</button>

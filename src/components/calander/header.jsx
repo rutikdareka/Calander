@@ -6,7 +6,7 @@ const Header = () => {
   const { viewDate, selectedView } = useContext(MyContext);
 
   // Days configuration
-  const days = ["Rutik","Rahul","Imam","Rose","Ali","Heayoun","D.Cal"];
+  const days = ["Rutik","Rahul","Imam","Rose","Ali","Heayoun","D.Cal","JHop","KIM","JISO","Junkoog","Ronaldo","Mark"];
 
   // Determine the days to display based on selectedView
   const displayedDays = useMemo(() => {
