@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { MyContext } from './Context';
 
 export function MyProvider({ children }) {
@@ -75,20 +75,26 @@ export function MyProvider({ children }) {
     setDescription('');
   }, []);
 
-  const formatTimeSlot = (hour, min) => {
-    const period = hour < 12 ? 'AM' : 'PM';
+//   const formatTimeSlot = (hour, min) => {
+//     const period = hour < 12 ? 'AM' : 'PM';
+//     const displayHour = hour % 12 === 0 ? 12 : hour % 12;
+//     const startTime = `${displayHour}:${min === 0 ? '00' : '30'} ${period}`;
+//     let nextHour = hour;
+//     let nextMin = min + 30;
+//     if (nextMin >= 60) {
+//       nextHour += 1;
+//       nextMin = 0;
+//     }
+//     const nextPeriod = nextHour < 12 ? 'AM' : 'PM';
+//     const nextDisplayHour = nextHour % 12 === 0 ? 12 : nextHour % 12;
+//     const endTime = `${nextDisplayHour}:${nextMin === 0 ? '00' : '30'} ${nextPeriod}`;
+//     return `${startTime} to ${endTime}`;
+//   };
+
+const formatTimeSlot = (hour, min) => {
+    const period = hour >= 12 ? 'PM' : 'AM';
     const displayHour = hour % 12 === 0 ? 12 : hour % 12;
-    const startTime = `${displayHour}:${min === 0 ? '00' : '30'} ${period}`;
-    let nextHour = hour;
-    let nextMin = min + 30;
-    if (nextMin >= 60) {
-      nextHour += 1;
-      nextMin = 0;
-    }
-    const nextPeriod = nextHour < 12 ? 'AM' : 'PM';
-    const nextDisplayHour = nextHour % 12 === 0 ? 12 : nextHour % 12;
-    const endTime = `${nextDisplayHour}:${nextMin === 0 ? '00' : '30'} ${nextPeriod}`;
-    return `${startTime} to ${endTime}`;
+    return `${displayHour}:${min === 0 ? '00' : min} ${period}`;
   };
 
   const isBlockSelected = (day, slotIndex) => {
@@ -106,7 +112,7 @@ export function MyProvider({ children }) {
   };
 
   const handleMouseDown = (day, slotIndex) => {
-    setIsSelecting(true);
+    setIsSelecting(true);   
     setSelectionStart({ day, slotIndex });
     setSelectedDay(day);
     setPreviewBlocks([{ day, slotIndex }]);
@@ -165,7 +171,25 @@ export function MyProvider({ children }) {
     setShowMeetingScheduler(true);
   };
 
+  const names = ["Rutik", "Rahul", "Imam", "Rose", "Ali", "Heayoun", "D.Cal", "JHop", "KIM", "JISO", "Junkoog", "Ronaldo", "Mark", "Sajang-youn"];
+
+  // Calculate displayedDays (same logic as in Header.jsx)
+  const displayedDays = useMemo(() => {
+    if (selectedView === 'Day') {
+      const currentDay = new Date(viewDate).getDay();
+      return [names[currentDay]];
+    } else if (selectedView === 'Work Week') {
+      return days.slice(1, 6);
+    } else if (selectedView === 'Week') {
+      return days;
+    } else if (selectedView === 'Month') {
+      return [];
+    }
+    return names;
+  }, [selectedView, viewDate]);
+
   const contextValue = {
+    displayedDays,
     viewDate,
     setViewDate,
     navigateFiveDays,

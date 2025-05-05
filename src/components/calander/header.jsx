@@ -6,18 +6,17 @@ const Header = () => {
   const { viewDate, selectedView } = useContext(MyContext);
 
   // Days configuration
-  const days = ["Rutik","Rahul","Imam","Rose","Ali","Heayoun","D.Cal","JHop","KIM","JISO","Junkoog","Ronaldo","Mark"];
+  const days = ["Rutik", "Rahul", "Imam", "Rose", "Ali", "Heayoun", "D.Cal", "JHop", "KIM", "JISO", "Junkoog", "Ronaldo", "Mark", "Sajang-youn"];
 
   // Determine the days to display based on selectedView
   const displayedDays = useMemo(() => {
     if (selectedView === 'Day') {
       const currentDay = new Date(viewDate).getDay();
       return [days[currentDay]]; // Only the current day
-    } 
-    else if (selectedView === 'Work Week') {
+    } else if (selectedView === 'Work Week') {
       return days.slice(1, 6); // Monday to Friday
     } else if (selectedView === 'Week') {
-      return days; // Sunday to Saturday
+      return days; // All days
     } else if (selectedView === 'Month') {
       return []; // For Month view, we won't show day names in this section
     }
@@ -67,15 +66,50 @@ const Header = () => {
   return (
     <div className="manage_header">
       <MinimalCalendarHeader />
-      <div className={`grid-header ${gridClass}`}>
+      <div
+        className={`grid-header ${gridClass}`}
+        style={{
+          display: 'flex',
+          overflowX: 'auto',
+          whiteSpace: 'nowrap',
+          scrollbarWidth: 'none', // Firefox
+          msOverflowStyle: 'none', // IE and Edge
+        }}
+      >
+        <style>
+          {`
+            .grid-header::-webkit-scrollbar {
+              display: none; /* Hide scrollbar for Chrome, Safari */
+            }
+          `}
+        </style>
         {selectedView === 'Month' ? (
           <div className="month-range">{getMonthRange}</div>
         ) : (
           <>
-            {/* <div className="month-range">{getMonthRange}</div> */}
-            <div className="time-header"></div>
+            <div
+              className="time-header"
+              style={{
+                width: '80px',
+                flexShrink: 0,
+                padding: '10px',
+                boxSizing: 'border-box',
+              }}
+            ></div>
             {displayedDays.map((day, index) => (
-              <div key={index} className="day-header">
+              <div
+                key={index}
+                className="day-header"
+                style={{
+                  width: '120px',
+                  flexShrink: 0,
+                  textAlign: 'center',
+                  padding: '10px 0',
+                  fontWeight: 'bold',
+                  borderRight: '1px solid #444',
+                  boxSizing: 'border-box',
+                }}
+              >
                 {day}
               </div>
             ))}

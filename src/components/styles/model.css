@@ -594,3 +594,38 @@
     cursor: pointer;
     transition: border-color 0.25s;
   }
+
+
+
+
+  .suggestions-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border: 1px solid #ccc;
+    max-height: 150px;
+    overflow-y: auto;
+    animation: slideDown 0.3s ease-out forwards;
+    opacity: 0;
+  }
+  
+  .suggestions-list li {
+    padding: 5px;
+    cursor: pointer;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .suggestions-list li:hover {
+    background-color: #e0e0e0;
+  }
+  
+  @keyframes slideDown {
+    0% {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
